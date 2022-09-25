@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 import com.royal.tiger.androidweatherapp.R
+import kotlin.math.ceil
 
 @Composable
 fun WeatherCard(
@@ -36,7 +37,7 @@ fun WeatherCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Today ${data.time.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                    text = "Today ${data.time.format(DateTimeFormatter.ofPattern("hh a"))}",
                     modifier = modifier.align(Alignment.End),
                     color = Color.White,
                 )
@@ -48,7 +49,7 @@ fun WeatherCard(
                 )
                 Spacer(modifier = modifier.height(16.dp))
                 Text(
-                    text = "${ data.temperature } °C",
+                    text = "${ ceil(data.temperature).roundToInt() } °C",
                     fontSize = 48.sp,
                     color = Color.White
                 )
@@ -58,7 +59,7 @@ fun WeatherCard(
                     fontSize = 18.sp,
                     color = Color.White
                 )
-                Spacer(modifier = modifier.height(16.dp))
+                Spacer(modifier = modifier.height(24.dp))
                 Row(
                     modifier = modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround,

@@ -58,6 +58,8 @@ class MainActivity : ComponentActivity() {
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             TodayWeatherForecast(state = viewModel.state)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            WeeklyWeatherSummery(state = viewModel.state)
                         }
 
                         if(viewModel.state.loading) {

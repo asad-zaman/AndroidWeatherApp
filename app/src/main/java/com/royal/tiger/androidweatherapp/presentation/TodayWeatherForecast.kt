@@ -6,10 +6,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -18,25 +22,35 @@ fun TodayWeatherForecast(
     modifier: Modifier = Modifier
 ) {
     state.data?.perDayWeatherData?.get(0)?.let { hourlyWeatherItems ->
-        Column(modifier = modifier.padding(16.dp)) {
+        val scrollState = rememberLazyListState()
+
+        Column(modifier = modifier.padding(horizontal = 10.dp)) {
             Text(
                 text = "Today",
                 color = Color.White,
                 fontSize = 20.sp,
+                modifier = modifier.padding(horizontal = 10.dp),
+                style = TextStyle(textDecoration = TextDecoration.Underline)
             )
             Spacer(modifier = modifier.height(10.dp))
             LazyRow(
-                state = rememberLazyListState(),
-                modifier = modifier,
+                state = scrollState,
+                modifier = modifier.padding(10.dp),
             ) {
                 items(hourlyWeatherItems) { data ->
                     HourlyWeatherDisplay(
-                        hour = data.time.format(DateTimeFormatter.ofPattern("hh:mm a")),
+                        time = data.time,
                         icon = data.weatherType.icon,
                         temperature = data.temperature,
-                        modifier = modifier.padding(horizontal = 10.dp)
+                        modifier = modifier.padding(horizontal = 5.dp)
                     )
                 }
+            }
+
+            LaunchedEffect(true) {
+                scrollState.scrollToItem(hourlyWeatherItems.indexOfFirst {
+                    it.time.hour == LocalDateTime.now().hour
+                })
             }
         }
     }
